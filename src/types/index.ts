@@ -4,6 +4,7 @@ export interface Product {
   description: string;
   unit: string;
   quantity: number;
+  responsibleName: string;
   createdAt: string;
 }
 
@@ -13,6 +14,7 @@ export interface Output {
   productName: string;
   quantity: number;
   destination: string;
+  responsibleName: string;
   date: string;
   createdAt: string;
 }

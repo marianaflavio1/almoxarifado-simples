@@ -29,6 +29,7 @@ interface ProductFormProps {
     description: string;
     unit: string;
     quantity: number;
+    responsibleName: string;
   }) => { product: { name: string; unit: string; quantity: number }; isNew: boolean; addedQuantity: number } | void;
 }
 
@@ -37,6 +38,7 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
   const [description, setDescription] = useState('');
   const [unit, setUnit] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [responsibleName, setResponsibleName] = useState('');
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -60,6 +62,15 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
       return;
     }
 
+    if (!responsibleName.trim()) {
+      toast({
+        title: 'Erro',
+        description: 'O nome do responsável é obrigatório.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const qty = parseInt(quantity) || 0;
     if (qty < 0) {
       toast({
@@ -75,6 +86,7 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
       description: description.trim(),
       unit,
       quantity: qty,
+      responsibleName: responsibleName.trim(),
     });
 
     // Reset form
@@ -82,6 +94,7 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
     setDescription('');
     setUnit('');
     setQuantity('');
+    setResponsibleName('');
 
     // Mensagem de confirmação baseada no resultado
     if (result && typeof result === 'object' && 'isNew' in result) {
@@ -155,6 +168,19 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
             placeholder="0"
           />
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="responsibleName">Nome do Responsável *</Label>
+        <Input
+          id="responsibleName"
+          value={responsibleName}
+          onChange={(e) => setResponsibleName(e.target.value)}
+          placeholder="Nome de quem está cadastrando"
+        />
+        <p className="text-xs text-muted-foreground">
+          Informe o nome da pessoa responsável por este cadastro
+        </p>
       </div>
 
       <Button type="submit" className="w-full">
