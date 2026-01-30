@@ -29,7 +29,7 @@ interface ProductFormProps {
     description: string;
     unit: string;
     quantity: number;
-  }) => void;
+  }) => { product: { name: string; unit: string; quantity: number }; isNew: boolean; addedQuantity: number } | void;
 }
 
 export function ProductForm({ onSubmit }: ProductFormProps) {
@@ -70,7 +70,7 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
       return;
     }
 
-    onSubmit({
+    const result = onSubmit({
       name: name.trim(),
       description: description.trim(),
       unit,
@@ -83,10 +83,25 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
     setUnit('');
     setQuantity('');
 
-    toast({
-      title: 'Sucesso!',
-      description: 'Produto cadastrado com sucesso.',
-    });
+    // Mensagem de confirmação baseada no resultado
+    if (result && typeof result === 'object' && 'isNew' in result) {
+      if (result.isNew) {
+        toast({
+          title: 'Produto Cadastrado!',
+          description: `"${result.product.name}" adicionado ao estoque com ${result.addedQuantity} ${result.product.unit.toLowerCase()}(s).`,
+        });
+      } else {
+        toast({
+          title: 'Estoque Atualizado!',
+          description: `Foram adicionadas ${result.addedQuantity} ${result.product.unit.toLowerCase()}(s) ao produto "${result.product.name}". Nova quantidade total: ${result.product.quantity}.`,
+        });
+      }
+    } else {
+      toast({
+        title: 'Sucesso!',
+        description: 'Operação realizada com sucesso.',
+      });
+    }
   };
 
   return (
