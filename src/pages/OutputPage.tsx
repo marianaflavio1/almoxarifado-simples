@@ -12,6 +12,7 @@ export default function OutputPage() {
     productName: string;
     quantity: number;
     destination: string;
+    responsibleName: string;
     date: string;
   }) => {
     const product = getProduct(output.productId);

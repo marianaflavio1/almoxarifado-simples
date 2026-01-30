@@ -20,6 +20,7 @@ interface OutputFormProps {
     productName: string;
     quantity: number;
     destination: string;
+    responsibleName: string;
     date: string;
   }) => { success: boolean; error?: string };
 }
@@ -28,6 +29,7 @@ export function OutputForm({ products, onSubmit }: OutputFormProps) {
   const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState('');
   const [destination, setDestination] = useState('');
+  const [responsibleName, setResponsibleName] = useState('');
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const { toast } = useToast();
 
@@ -64,6 +66,15 @@ export function OutputForm({ products, onSubmit }: OutputFormProps) {
       return;
     }
 
+    if (!responsibleName.trim()) {
+      toast({
+        title: 'Erro',
+        description: 'O nome do responsável é obrigatório.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (!date) {
       toast({
         title: 'Erro',
@@ -78,6 +89,7 @@ export function OutputForm({ products, onSubmit }: OutputFormProps) {
       productName: selectedProduct?.name || '',
       quantity: qty,
       destination: destination.trim(),
+      responsibleName: responsibleName.trim(),
       date,
     });
 
@@ -85,6 +97,7 @@ export function OutputForm({ products, onSubmit }: OutputFormProps) {
       setProductId('');
       setQuantity('');
       setDestination('');
+      setResponsibleName('');
       setDate(format(new Date(), 'yyyy-MM-dd'));
 
       toast({
@@ -168,6 +181,19 @@ export function OutputForm({ products, onSubmit }: OutputFormProps) {
           onChange={(e) => setDestination(e.target.value)}
           placeholder="Ex: Setor Administrativo, Manutenção, etc."
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="responsibleName">Nome do Responsável *</Label>
+        <Input
+          id="responsibleName"
+          value={responsibleName}
+          onChange={(e) => setResponsibleName(e.target.value)}
+          placeholder="Nome de quem está retirando"
+        />
+        <p className="text-xs text-muted-foreground">
+          Informe o nome da pessoa responsável por esta retirada
+        </p>
       </div>
 
       <Button type="submit" className="w-full">

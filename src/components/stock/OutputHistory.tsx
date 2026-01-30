@@ -36,6 +36,7 @@ export function OutputHistory({ outputs }: OutputHistoryProps) {
           <TableHead>Produto</TableHead>
           <TableHead className="text-right">Quantidade</TableHead>
           <TableHead>Destino</TableHead>
+          <TableHead>Responsável</TableHead>
           <TableHead>Registrado em</TableHead>
         </TableRow>
       </TableHeader>
@@ -50,6 +51,7 @@ export function OutputHistory({ outputs }: OutputHistoryProps) {
               -{output.quantity}
             </TableCell>
             <TableCell>{output.destination}</TableCell>
+            <TableCell>{output.responsibleName || '—'}</TableCell>
             <TableCell className="text-muted-foreground text-sm">
               {format(parseISO(output.createdAt), "dd/MM/yyyy 'às' HH:mm", {
                 locale: ptBR,

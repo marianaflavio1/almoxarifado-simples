@@ -41,6 +41,7 @@ export function StockTable({ products, searchTerm }: StockTableProps) {
           <TableHead>Descrição</TableHead>
           <TableHead>Unidade</TableHead>
           <TableHead className="text-right">Quantidade</TableHead>
+          <TableHead>Cadastrado por</TableHead>
           <TableHead className="text-right">Status</TableHead>
         </TableRow>
       </TableHeader>
@@ -55,6 +56,7 @@ export function StockTable({ products, searchTerm }: StockTableProps) {
             <TableCell className="text-right font-semibold">
               {product.quantity}
             </TableCell>
+            <TableCell>{product.responsibleName || '—'}</TableCell>
             <TableCell className="text-right">
               {product.quantity <= 0 ? (
                 <span className="badge-low-stock">Sem estoque</span>
