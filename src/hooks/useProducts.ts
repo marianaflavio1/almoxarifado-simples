@@ -18,14 +18,38 @@ export function useProducts() {
     setProducts(newProducts);
   };
 
-  const addProduct = (product: Omit<Product, 'id' | 'createdAt'>) => {
+  const findProductByName = (name: string) => {
+    const normalizedName = name.trim().toLowerCase();
+    return products.find((p) => p.name.trim().toLowerCase() === normalizedName);
+  };
+
+  const addProduct = (product: Omit<Product, 'id' | 'createdAt'>): { product: Product; isNew: boolean; addedQuantity: number } => {
+    const existingProduct = findProductByName(product.name);
+    
+    if (existingProduct) {
+      // Produto já existe - somar quantidade
+      const updatedProducts = products.map((p) =>
+        p.id === existingProduct.id
+          ? { ...p, quantity: p.quantity + product.quantity }
+          : p
+      );
+      saveProducts(updatedProducts);
+      return {
+        product: { ...existingProduct, quantity: existingProduct.quantity + product.quantity },
+        isNew: false,
+        addedQuantity: product.quantity,
+      };
+    }
+
+    // Produto novo - criar registro
     const newProduct: Product = {
       ...product,
+      name: product.name.trim(),
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
     saveProducts([...products, newProduct]);
-    return newProduct;
+    return { product: newProduct, isNew: true, addedQuantity: product.quantity };
   };
 
   const updateProductQuantity = (productId: string, quantityChange: number) => {
@@ -44,5 +68,6 @@ export function useProducts() {
     addProduct,
     updateProductQuantity,
     getProduct,
+    findProductByName,
   };
 }
