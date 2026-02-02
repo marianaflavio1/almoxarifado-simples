@@ -1,11 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Package, PackagePlus, PackageMinus, History, LayoutDashboard } from 'lucide-react';
+import { Package, PackagePlus, PackageMinus, History, LayoutDashboard, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Estoque', href: '/', icon: LayoutDashboard },
   { name: 'Cadastrar Produto', href: '/cadastrar', icon: PackagePlus },
   { name: 'Registrar Saída', href: '/saida', icon: PackageMinus },
+  { name: 'Painel Admin', href: '/admin', icon: Shield },
   { name: 'Histórico', href: '/historico', icon: History },
 ];
 

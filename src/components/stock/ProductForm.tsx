@@ -12,16 +12,7 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 
-const UNITS = [
-  'Unidade',
-  'Pacote',
-  'Caixa',
-  'Litro',
-  'Quilograma',
-  'Metro',
-  'Rolo',
-  'Par',
-];
+const UNITS = ['Unidade', 'Pacote', 'Metro'];
 
 interface ProductFormProps {
   onSubmit: (product: {
