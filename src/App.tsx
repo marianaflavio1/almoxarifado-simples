@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import RegisterProductPage from "./pages/RegisterProductPage";
 import OutputPage from "./pages/OutputPage";
 import HistoryPage from "./pages/HistoryPage";
+import AdminPanelPage from "./pages/AdminPanelPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/cadastrar" element={<RegisterProductPage />} />
           <Route path="/saida" element={<OutputPage />} />
+          <Route path="/admin" element={<AdminPanelPage />} />
           <Route path="/historico" element={<HistoryPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

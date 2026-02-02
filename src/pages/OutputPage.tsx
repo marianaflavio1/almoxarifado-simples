@@ -2,10 +2,12 @@ import { Layout } from '@/components/layout/Layout';
 import { OutputForm } from '@/components/stock/OutputForm';
 import { useProducts } from '@/hooks/useProducts';
 import { useOutputs } from '@/hooks/useOutputs';
+import { useMovements } from '@/hooks/useMovements';
 
 export default function OutputPage() {
   const { products, updateProductQuantity, getProduct } = useProducts();
   const { addOutput } = useOutputs();
+  const { addMovement } = useMovements();
 
   const handleOutput = (output: {
     productId: string;
@@ -28,8 +30,21 @@ export default function OutputPage() {
       };
     }
 
-    // Register output
+    // Register output (legacy)
     addOutput(output);
+
+    // Register unified movement
+    addMovement({
+      type: 'saida',
+      productId: output.productId,
+      productName: output.productName,
+      previousQuantity: product.quantity,
+      newQuantity: product.quantity - output.quantity,
+      difference: -output.quantity,
+      destination: output.destination,
+      responsibleName: output.responsibleName,
+      date: output.date,
+    });
 
     // Update product quantity
     updateProductQuantity(output.productId, -output.quantity);

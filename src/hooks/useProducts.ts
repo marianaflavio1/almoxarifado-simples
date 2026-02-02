@@ -59,6 +59,24 @@ export function useProducts() {
     saveProducts(updatedProducts);
   };
 
+  const setProductQuantity = (productId: string, newQuantity: number): { success: boolean; previousQuantity?: number; error?: string } => {
+    if (newQuantity < 0) {
+      return { success: false, error: 'Não é possível definir quantidade negativa.' };
+    }
+
+    const product = products.find((p) => p.id === productId);
+    if (!product) {
+      return { success: false, error: 'Produto não encontrado.' };
+    }
+
+    const previousQuantity = product.quantity;
+    const updatedProducts = products.map((p) =>
+      p.id === productId ? { ...p, quantity: newQuantity } : p
+    );
+    saveProducts(updatedProducts);
+    return { success: true, previousQuantity };
+  };
+
   const getProduct = (productId: string) => {
     return products.find((p) => p.id === productId);
   };
@@ -67,6 +85,7 @@ export function useProducts() {
     products,
     addProduct,
     updateProductQuantity,
+    setProductQuantity,
     getProduct,
     findProductByName,
   };

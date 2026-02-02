@@ -18,3 +18,19 @@ export interface Output {
   date: string;
   createdAt: string;
 }
+
+export type MovementType = 'entrada' | 'saida' | 'ajuste';
+
+export interface StockMovement {
+  id: string;
+  type: MovementType;
+  productId: string;
+  productName: string;
+  previousQuantity: number;
+  newQuantity: number;
+  difference: number;
+  destination?: string;
+  responsibleName: string;
+  date: string;
+  createdAt: string;
+}
