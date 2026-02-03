@@ -18,13 +18,20 @@ export function useProducts() {
     setProducts(newProducts);
   };
 
+  const formatProductName = (name: string): string => {
+    const trimmed = name.trim();
+    if (!trimmed) return '';
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+  };
+
   const findProductByName = (name: string) => {
     const normalizedName = name.trim().toLowerCase();
     return products.find((p) => p.name.trim().toLowerCase() === normalizedName);
   };
 
   const addProduct = (product: Omit<Product, 'id' | 'createdAt'>): { product: Product; isNew: boolean; addedQuantity: number } => {
-    const existingProduct = findProductByName(product.name);
+    const formattedName = formatProductName(product.name);
+    const existingProduct = findProductByName(formattedName);
     
     if (existingProduct) {
       // Produto já existe - somar quantidade
@@ -41,10 +48,10 @@ export function useProducts() {
       };
     }
 
-    // Produto novo - criar registro
+    // Produto novo - criar registro com nome padronizado
     const newProduct: Product = {
       ...product,
-      name: product.name.trim(),
+      name: formattedName,
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
