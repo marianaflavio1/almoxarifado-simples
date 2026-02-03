@@ -88,6 +88,17 @@ export function useProducts() {
     return products.find((p) => p.id === productId);
   };
 
+  const deleteProduct = (productId: string): { success: boolean; deletedProduct?: Product; error?: string } => {
+    const product = products.find((p) => p.id === productId);
+    if (!product) {
+      return { success: false, error: 'Produto não encontrado.' };
+    }
+
+    const updatedProducts = products.filter((p) => p.id !== productId);
+    saveProducts(updatedProducts);
+    return { success: true, deletedProduct: product };
+  };
+
   return {
     products,
     addProduct,
@@ -95,5 +106,6 @@ export function useProducts() {
     setProductQuantity,
     getProduct,
     findProductByName,
+    deleteProduct,
   };
 }
