@@ -6,7 +6,7 @@ const navigation = [
   { name: 'Estoque', href: '/', icon: LayoutDashboard },
   { name: 'Cadastrar Produto', href: '/cadastrar', icon: PackagePlus },
   { name: 'Registrar Saída', href: '/saida', icon: PackageMinus },
-  { name: 'Painel Admin', href: '/admin', icon: Shield },
+  { name: 'Painel Admin', href: '/admin', icon: Shield, isAdmin: true },
   { name: 'Histórico', href: '/historico', icon: History },
 ];
 
@@ -30,6 +30,7 @@ export function Sidebar() {
       <nav className="flex-1 p-4 space-y-1">
         {navigation.map((item) => {
           const isActive = location.pathname === item.href;
+          const isAdmin = 'isAdmin' in item && item.isAdmin;
           return (
             <Link
               key={item.name}
@@ -38,10 +39,11 @@ export function Sidebar() {
                 'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors',
                 isActive
                   ? 'bg-sidebar-accent text-sidebar-primary'
-                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
+                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground',
+                isAdmin && 'border-l-2 border-amber-500'
               )}
             >
-              <item.icon className="h-5 w-5" />
+              <item.icon className={cn('h-5 w-5', isAdmin && 'text-amber-500')} />
               {item.name}
             </Link>
           );

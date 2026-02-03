@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { Layout } from '@/components/layout/Layout';
 import { AdminAdjustmentForm } from '@/components/stock/AdminAdjustmentForm';
+import { DeleteProductDialog } from '@/components/stock/DeleteProductDialog';
 import { useProducts } from '@/hooks/useProducts';
 import { useMovements } from '@/hooks/useMovements';
+import { useToast } from '@/hooks/use-toast';
+import { Product } from '@/types';
 import {
   Table,
   TableBody,
@@ -11,10 +15,16 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
 
 export default function AdminPanelPage() {
-  const { products, setProductQuantity } = useProducts();
+  const { products, setProductQuantity, deleteProduct } = useProducts();
   const { addMovement } = useMovements();
+  const { toast } = useToast();
+  
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const handleAdjustment = (data: {
     productId: string;
@@ -26,7 +36,6 @@ export default function AdminPanelPage() {
     const result = setProductQuantity(data.productId, data.newQuantity);
 
     if (result.success) {
-      // Register movement
       addMovement({
         type: 'ajuste',
         productId: data.productId,
@@ -40,6 +49,44 @@ export default function AdminPanelPage() {
     }
 
     return result;
+  };
+
+  const handleDeleteClick = (product: Product) => {
+    setProductToDelete(product);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = (responsibleName: string) => {
+    if (!productToDelete) return;
+
+    const result = deleteProduct(productToDelete.id);
+
+    if (result.success && result.deletedProduct) {
+      addMovement({
+        type: 'exclusao',
+        productId: result.deletedProduct.id,
+        productName: result.deletedProduct.name,
+        previousQuantity: result.deletedProduct.quantity,
+        newQuantity: 0,
+        difference: -result.deletedProduct.quantity,
+        responsibleName: responsibleName,
+        date: new Date().toISOString(),
+      });
+
+      toast({
+        title: 'Produto excluído',
+        description: `O produto "${result.deletedProduct.name}" foi removido permanentemente do estoque.`,
+      });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao excluir',
+        description: result.error || 'Não foi possível excluir o produto.',
+      });
+    }
+
+    setDeleteDialogOpen(false);
+    setProductToDelete(null);
   };
 
   return (
@@ -77,6 +124,7 @@ export default function AdminPanelPage() {
                     <TableHead>Produto</TableHead>
                     <TableHead>Unidade</TableHead>
                     <TableHead className="text-right">Quantidade</TableHead>
+                    <TableHead className="text-center">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -85,6 +133,17 @@ export default function AdminPanelPage() {
                       <TableCell className="font-medium">{product.name}</TableCell>
                       <TableCell>{product.unit}</TableCell>
                       <TableCell className="text-right">{product.quantity}</TableCell>
+                      <TableCell className="text-center">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          onClick={() => handleDeleteClick(product)}
+                          title="Excluir produto"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -93,6 +152,13 @@ export default function AdminPanelPage() {
           </CardContent>
         </Card>
       </div>
+
+      <DeleteProductDialog
+        product={productToDelete}
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={handleDeleteConfirm}
+      />
     </Layout>
   );
 }

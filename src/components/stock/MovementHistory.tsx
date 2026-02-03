@@ -19,6 +19,7 @@ const typeConfig: Record<MovementType, { label: string; variant: 'default' | 'se
   entrada: { label: 'Entrada', variant: 'default' },
   saida: { label: 'Saída', variant: 'destructive' },
   ajuste: { label: 'Ajuste Admin', variant: 'secondary' },
+  exclusao: { label: 'Exclusão', variant: 'outline' },
 };
 
 export function MovementHistory({ movements }: MovementHistoryProps) {
@@ -61,6 +62,8 @@ export function MovementHistory({ movements }: MovementHistoryProps) {
                   </span>
                 ) : movement.type === 'entrada' ? (
                   <span className="text-primary">+{movement.difference}</span>
+                ) : movement.type === 'exclusao' ? (
+                  <span className="text-muted-foreground">{movement.previousQuantity} (removido)</span>
                 ) : (
                   <span className="text-destructive">{movement.difference}</span>
                 )}

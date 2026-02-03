@@ -19,7 +19,7 @@ export interface Output {
   createdAt: string;
 }
 
-export type MovementType = 'entrada' | 'saida' | 'ajuste';
+export type MovementType = 'entrada' | 'saida' | 'ajuste' | 'exclusao';
 
 export interface StockMovement {
   id: string;
