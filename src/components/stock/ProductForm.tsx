@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { toTitleCase } from '@/lib/utils';
 
 const UNITS = ['Unidade', 'Pacote', 'Metro'];
 
@@ -77,7 +78,7 @@ export function ProductForm({ onSubmit }: ProductFormProps) {
       description: description.trim(),
       unit,
       quantity: qty,
-      responsibleName: responsibleName.trim(),
+      responsibleName: toTitleCase(responsibleName),
     });
 
     // Reset form

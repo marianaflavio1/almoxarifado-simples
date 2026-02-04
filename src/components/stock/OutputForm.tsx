@@ -12,6 +12,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Product } from '@/types';
 import { format } from 'date-fns';
+import { toTitleCase } from '@/lib/utils';
 
 interface OutputFormProps {
   products: Product[];
@@ -89,7 +90,7 @@ export function OutputForm({ products, onSubmit }: OutputFormProps) {
       productName: selectedProduct?.name || '',
       quantity: qty,
       destination: destination.trim(),
-      responsibleName: responsibleName.trim(),
+      responsibleName: toTitleCase(responsibleName),
       date,
     });
 
