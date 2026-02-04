@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <BrowserRouter basename="/almoxarifado-simples">
+    <BrowserRouter>
       <TooltipProvider>
         <Routes>
           <Route path="/" element={<Index />} />
