@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Product } from '@/types';
-import { toTitleCase } from '@/lib/utils';
+import { toUpperText } from '@/lib/utils';
 
 interface DeleteProductDialogProps {
   product: Product | null;
@@ -35,7 +35,7 @@ export function DeleteProductDialog({
       setError('O nome do responsável é obrigatório.');
       return;
     }
-    onConfirm(toTitleCase(responsibleName));
+    onConfirm(toUpperText(responsibleName));
     setResponsibleName('');
     setError('');
   };

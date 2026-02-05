@@ -5,10 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Padroniza nome com primeira letra de cada palavra maiúscula
-export function toTitleCase(str: string): string {
-  return str
-    .trim()
-    .toLowerCase()
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+// Padroniza texto para letras maiúsculas
+export function toUpperText(str: string): string {
+  return str.trim().toUpperCase();
 }

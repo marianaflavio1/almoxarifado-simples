@@ -12,7 +12,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Product } from '@/types';
 import { AlertCircle, ArrowRight } from 'lucide-react';
-import { toTitleCase } from '@/lib/utils';
+import { toUpperText } from '@/lib/utils';
 
 interface AdminAdjustmentFormProps {
   products: Product[];
@@ -71,7 +71,7 @@ export function AdminAdjustmentForm({ products, onSubmit }: AdminAdjustmentFormP
       productName: selectedProduct!.name,
       previousQuantity: currentQuantity,
       newQuantity: parsedNewQuantity,
-      responsibleName: toTitleCase(responsibleName),
+      responsibleName: toUpperText(responsibleName),
     });
 
     if (result.success) {

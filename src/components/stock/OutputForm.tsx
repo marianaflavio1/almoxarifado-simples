@@ -12,7 +12,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Product } from '@/types';
 import { format } from 'date-fns';
-import { toTitleCase } from '@/lib/utils';
+import { toUpperText } from '@/lib/utils';
 
 interface OutputFormProps {
   products: Product[];
@@ -89,8 +89,8 @@ export function OutputForm({ products, onSubmit }: OutputFormProps) {
       productId,
       productName: selectedProduct?.name || '',
       quantity: qty,
-      destination: destination.trim(),
-      responsibleName: toTitleCase(responsibleName),
+      destination: toUpperText(destination),
+      responsibleName: toUpperText(responsibleName),
       date,
     });
 
