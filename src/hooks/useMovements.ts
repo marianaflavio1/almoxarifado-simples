@@ -9,7 +9,16 @@ export function useMovements() {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      setMovements(JSON.parse(stored));
+      const parsed: StockMovement[] = JSON.parse(stored);
+      // Migrar registros existentes para MAIÚSCULAS
+      const migrated = parsed.map((m) => ({
+        ...m,
+        productName: m.productName?.trim().toUpperCase() ?? '',
+        responsibleName: m.responsibleName?.trim().toUpperCase() ?? '',
+        destination: m.destination?.trim().toUpperCase() ?? '',
+      }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+      setMovements(migrated);
     }
   }, []);
 

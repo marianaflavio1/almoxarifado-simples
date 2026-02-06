@@ -9,7 +9,16 @@ export function useOutputs() {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      setOutputs(JSON.parse(stored));
+      const parsed: Output[] = JSON.parse(stored);
+      // Migrar registros existentes para MAIÚSCULAS
+      const migrated = parsed.map((o) => ({
+        ...o,
+        productName: o.productName?.trim().toUpperCase() ?? '',
+        destination: o.destination?.trim().toUpperCase() ?? '',
+        responsibleName: o.responsibleName?.trim().toUpperCase() ?? '',
+      }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+      setOutputs(migrated);
     }
   }, []);
 
