@@ -9,7 +9,16 @@ export function useProducts() {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      setProducts(JSON.parse(stored));
+      const parsed: Product[] = JSON.parse(stored);
+      // Migrar registros existentes para MAIÚSCULAS
+      const migrated = parsed.map((p) => ({
+        ...p,
+        name: p.name?.trim().toUpperCase() ?? '',
+        description: p.description?.trim().toUpperCase() ?? '',
+        responsibleName: p.responsibleName?.trim().toUpperCase() ?? '',
+      }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+      setProducts(migrated);
     }
   }, []);
 
@@ -19,9 +28,7 @@ export function useProducts() {
   };
 
   const formatProductName = (name: string): string => {
-    const trimmed = name.trim();
-    if (!trimmed) return '';
-    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+    return name.trim().toUpperCase();
   };
 
   const findProductByName = (name: string) => {
